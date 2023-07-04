@@ -1,0 +1,12 @@
+.page_indicator{
+	  left: 50%;
+      top: 50%;
+      background: rgba(0, 0, 0, 0.6);
+      width: 100vw;
+      height: 100pc;
+      transform: translate(-50%, -50%);
+      z-index: 99999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+}

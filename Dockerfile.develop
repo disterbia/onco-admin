@@ -1,0 +1,17 @@
+FROM eclipse-temurin:17-jdk-alpine as build
+WORKDIR /app
+
+COPY . .
+
+RUN chmod +x ./gradlew
+RUN ./gradlew bootWar
+
+FROM eclipse-temurin:17-jdk-alpine
+RUN apk add --no-cache tzdata
+
+VOLUME /tmp
+COPY --from=build /app/build/libs/*.war app.war
+COPY --from=build /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+
+EXPOSE 8081
+ENTRYPOINT ["java","-jar","/app.war"]

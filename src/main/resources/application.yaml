@@ -1,0 +1,99 @@
+server:
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  port: 8081
+  tomcat:
+    basedir: ~/workspace/onco/tomcat
+    accesslog:
+      directory: logs
+      enabled: true
+
+springdoc:
+  packagesToScan: net.huray.onco
+  pathsToMatch: /v3, /**
+  swagger-ui.path: /swagger-ui.html
+  swagger-ui:
+    doc-expansion: "none"
+  swagger-ui.tagsSorter: alpha
+
+spring:
+  application:
+    name: ONCO-WEB
+  profiles:
+    active: ${SPRING_ACTIVE}
+    include: common, ncp
+  mvc:
+    static-path-pattern: /resources/**
+    favicon.enabled: false
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+ncp:
+  storage:
+    bucket-name: onco-d-obj
+    end-point: https://kr.object.ncloudstorage.com
+    region-name: kr-standard
+  key:
+    access: ENC(RaHgCslCzPdDrjg3M9iLB4TLTPoLEdv8nYCSOflbjdg=)
+    secret: ENC(fq+wvOgsrnBGAWVksD88sYyjuZH0W5lqFmIhSxTDfBVxwY2akGXFhhzJt2CkpdyY/LusNuGpYuI=)
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+    password: ${JWT_SECRET_KEY}
+
+---
+spring:
+  output:
+      ansi:
+        enabled: always
+  config:
+    activate:
+      on-profile: ${SPRING_ACTIVE}
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
+    open-in-view: false
+    database: mysql
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+jwt:
+  token:
+    secret: ${JWT_SECRET_KEY}
+    duration:
+      access-token: 3153600000000
+      refresh-token: 603800000
+
+logging:
+  path: logs
+  level:
+    net:
+      huray:
+        onco: warn
+    org:
+      springframework:
+        web:
+          servlet:
+            PageNotFound: ERROR
+
